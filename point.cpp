@@ -14,8 +14,12 @@ namespace tetrasearch{
         return coord;
     }
 
+    void point::addTetrahedron(tetrahedron* t)
+    {
+        this->tetra.push_back(t);
+    }
 
-    std::vector<tetrahedron> point::getTetrahedron()
+    std::vector<tetrahedron*> point::getTetrahedron()
     {
         return this->tetra;
     }
@@ -66,17 +70,17 @@ namespace tetrasearch{
     {
         bool belongs = false;
 
-        for ( int i = 0; i < tetra.size(); i++)
+        for ( int i = 0; i < (int)tetra.size(); i++)
         {
             for ( int j = 0; j < 4; j++)
             {
                 belongs = false;
 
-                if ( !this->samePoints(tetra[i].getPoints()[j]) )
+                if ( !this->samePoints(*tetra[i]->getPoints()[j]) )
                 {
-                    for ( int k = 0; k < neighbours.size(); k++ )
+                    for ( int k = 0; k < (int)neighbours.size(); k++ )
                     {
-                        if( tetra[i].getPoints()[j].samePoints(this->neighbours[k]))
+                        if( this->neighbours[k].samePoints(*tetra[i]->getPoints()[j]))
                         {
                             belongs = true;
                             break;
@@ -84,7 +88,7 @@ namespace tetrasearch{
                     }
 
                     if ( !belongs )
-                        neighbours.push_back(tetra[i].getPoints()[j]);
+                        neighbours.push_back(*tetra[i]->getPoints()[j]);
                 }
             } 
         }
@@ -93,7 +97,41 @@ namespace tetrasearch{
 
     void point::computePointAttract( float r )
     {
-        //std::set<point> points = this->computeNeighbours();
+        std::vector<point> points = this->neighbours;
+        std::vector<point> traveled_points = this->neighbours;
+        bool belongs = false;
+
+        while ( points.size() != 0)
+        {
+            if ( this->isAttract( points[0], r ) )
+            {
+                this->point_attract.push_back(points[0]);
+
+                for ( int i = 0; i < (int)points[0].getNeighbours().size(); i++ )
+                {
+                    belongs = false;
+
+                    for ( int j = 0; j < (int)traveled_points.size(); j++ ) 
+                    {
+                        if ( points[0].getNeighbours()[i].samePoints( traveled_points[j]) || this->samePoints(points[0].getNeighbours()[i]) )
+                        {
+                            belongs = true;
+                            break;
+                        }
+                            
+                    }
+
+                    if ( !belongs )
+                    {
+                        traveled_points.push_back(points[0].getNeighbours()[i]);
+                        points.push_back(points[0].getNeighbours()[i]);
+                    }
+
+                }
+            }
+
+            points.erase(points.begin());
+        }
 
     }
 
