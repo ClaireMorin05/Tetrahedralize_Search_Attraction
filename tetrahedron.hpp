@@ -9,14 +9,20 @@ namespace tetrasearch{
     class tetrahedron
     {
         public :
-            tetrahedron( std::vector<point> _points ) : points(_points) {};
+            tetrahedron( point* p1, point* p2, point* p3, point* p4 ) 
+            { 
+                points.push_back(p1);
+                points.push_back(p2);
+                points.push_back(p3);
+                points.push_back(p4);
+            };
             ~tetrahedron(){};
 
-            std::vector<point> getPoints();
+            std::vector<point*> getPoints();
             
         private :
 
-            std::vector<point> points;
+            std::vector<point*> points;
         
 
     };

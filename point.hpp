@@ -4,6 +4,7 @@
 #include <vector>
 //#include "tetrahedron.hpp"
 #include <set>
+#include <cstdio>
 
 namespace tetrasearch{
 
@@ -15,20 +16,26 @@ namespace tetrasearch{
 
         public :
 
-            point( float _x, float _y, float _z, std::vector<tetrahedron> _tetra ) 
-            : x( _x ), y( _y ), z( _z ), tetra( _tetra ), point_attract(std::vector<point>()) { computeNeighbours(); };
+            point(){};
+            /*point( float _x, float _y, float _z, std::vector<tetrahedron> _tetra ) 
+            : x( _x ), y( _y ), z( _z ), tetra( _tetra ) {};*/
+
+            point( float _x, float _y, float _z) 
+            : x( _x ), y( _y ), z( _z ) {};
 
             ~point(){};
 
             static bool comparatorSet(point a, point b){ return a.samePoints(b); }
 
             std::vector<float> getCoord(); 
-            std::vector<tetrahedron> getTetrahedron();
+            std::vector<tetrahedron*> getTetrahedron();
             std::vector<point> getPointAttract();
             std::vector<point> getNeighbours();
 
             //===========test set================
             //std::set<point, decltype(comparatorSet)> getNeighbours();
+
+            inline void printCoord(){ printf("(x: %lf, y: %lf, z: %lf\n)", x, y, z); };
 
             bool isAttract ( point p, float attract_distance );
 
@@ -42,13 +49,15 @@ namespace tetrasearch{
 
             void computePointAttract( float r );
 
+            void addTetrahedron ( tetrahedron* t);
+
         private :
 
             float x;
             float y;
             float z;
         
-            std::vector<tetrahedron> tetra;
+            std::vector<tetrahedron*> tetra;
             std::vector<point> point_attract;
             std::vector<point> neighbours;
 

@@ -2,7 +2,7 @@
 
 namespace tetrasearch{
 
-    std::vector<point> tetrahedron::getPoints()
+    std::vector<point*> tetrahedron::getPoints()
     {
         return points;
     }
