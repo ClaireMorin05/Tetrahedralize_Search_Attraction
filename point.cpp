@@ -25,7 +25,7 @@ namespace tetrasearch{
         return this->point_attract;
     }
 
-    std::set<point> point::getNeighbours()
+    std::vector<point> point::getNeighbours()
     {
         return this->neighbours;
     }
@@ -62,26 +62,38 @@ namespace tetrasearch{
             return true;
     }
 
-    std::set<point> point::computeNeighbours()
+    void point::computeNeighbours()
     {
-        /*std::set<point> neighbours;
+        bool belongs = false;
 
         for ( int i = 0; i < tetra.size(); i++)
         {
             for ( int j = 0; j < 4; j++)
             {
+                belongs = false;
+
                 if ( !this->samePoints(tetra[i].getPoints()[j]) )
-                    neighbours.insert(tetra[i].getPoints()[j]);
+                {
+                    for ( int k = 0; k < neighbours.size(); k++ )
+                    {
+                        if( tetra[i].getPoints()[j].samePoints(this->neighbours[k]))
+                        {
+                            belongs = true;
+                            break;
+                        }
+                    }
+
+                    if ( !belongs )
+                        neighbours.push_back(tetra[i].getPoints()[j]);
+                }
             } 
         }
         
-        return neighbours;*/
-        return std::set<point>();
     }
 
     void point::computePointAttract( float r )
     {
-        std::set<point> points = this->computeNeighbours();
+        //std::set<point> points = this->computeNeighbours();
 
     }
 
