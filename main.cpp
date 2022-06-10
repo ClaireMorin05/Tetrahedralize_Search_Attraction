@@ -59,9 +59,9 @@ namespace tetrasearch {
 
     //================Reading files=================
     //=====================Nodes=======================
-    void readNodes()
+    void readNodes( string fileName )
     {
-        ifstream fileNode("data/tetgen-tmpfile.1.node", ios::in);
+        ifstream fileNode( fileName, ios::in);
 
         if ( fileNode )
         {
@@ -97,9 +97,9 @@ namespace tetrasearch {
 
     //======================Tetrahedrons==========================
     //prerequisite: have to be called after readNodes.
-    void readTetras()
+    void readTetras( string fileName )
     {
-        ifstream fileTetra("data/tetgen-tmpfile.1.ele", ios::in);
+        ifstream fileTetra( fileName, ios::in);
         tetrahedron* t ;
 
         if ( fileTetra )
@@ -140,8 +140,10 @@ namespace tetrasearch {
 
     int main(int argc, char const *argv[])
     {
-        readNodes();
-        readTetras();
+        string fileNodes = "data/tetgen-tmpfile.1.node";
+        string fileTetra = "data/tetgen-tmpfile.1.ele";
+        readNodes( fileNodes );
+        readTetras( fileTetra );
         cout << "nombre de points: " << points.size() << endl;
         cout << "nombre de tetraèdres: " << tetras.size() << endl;
 
@@ -154,7 +156,7 @@ namespace tetrasearch {
         {
             points[i]->computePointAttract(20.f);
         }
-        
+
         printf( "\n===========VOISINS===========\n");
         printNeighbours(points[0]);
 
