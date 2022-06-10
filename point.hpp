@@ -20,32 +20,33 @@ namespace tetrasearch{
             /*point( float _x, float _y, float _z, std::vector<tetrahedron> _tetra ) 
             : x( _x ), y( _y ), z( _z ), tetra( _tetra ) {};*/
 
-            point( float _x, float _y, float _z) 
-            : x( _x ), y( _y ), z( _z ) {};
+            point( int _id, float _x, float _y, float _z) 
+            : id(_id), x( _x ), y( _y ), z( _z ) {};
 
             ~point(){};
 
-            static bool comparatorSet(point a, point b){ return a.samePoints(b); }
+            static bool comparatorSet(point a, point b){ return a.samePoints(&b); }
 
             std::vector<float> getCoord(); 
+            int getId();
             std::vector<tetrahedron*> getTetrahedron();
-            std::vector<point> getPointAttract();
-            std::vector<point> getNeighbours();
+            std::vector<point* > getPointAttract();
+            std::vector<point* > getNeighbours();
 
             //===========test set================
             //std::set<point, decltype(comparatorSet)> getNeighbours();
 
             inline void printCoord(){ printf("(x: %lf, y: %lf, z: %lf\n)", x, y, z); };
 
-            bool isAttract ( point p, float attract_distance );
+            bool isAttract ( point* p, float attract_distance );
 
-            void addPoint ( point p );
+            void addPoint ( point* p );
 
             void searchAdjPoint ();
 
             void computeNeighbours();
 
-            bool samePoints ( point p );
+            bool samePoints ( point* p );
 
             void computePointAttract( float r );
 
@@ -53,13 +54,14 @@ namespace tetrasearch{
 
         private :
 
+            int id;
             float x;
             float y;
             float z;
         
             std::vector<tetrahedron*> tetra;
-            std::vector<point> point_attract;
-            std::vector<point> neighbours;
+            std::vector<point* > point_attract;
+            std::vector<point* > neighbours;
 
             //===========test set================
             //std::set<point, decltype(comparatorSet)> neighbours;

@@ -19,6 +19,7 @@ namespace tetrasearch {
         for (int i = 0; i < (int)t->getPoints().size(); i++)
         {
             t->getPoints()[i]->getCoord();
+            printf ("id: %i, ",  t->getPoints()[i]->getId() );
             printf ( "x: %1.3f, ", t->getPoints()[i]->getCoord()[0] );
             printf ( "y: %1.3f, ", t->getPoints()[i]->getCoord()[1] );
             printf ( "z: %1.3f \n", t->getPoints()[i]->getCoord()[2] );
@@ -30,20 +31,28 @@ namespace tetrasearch {
         printf( "\n points voisins (nb voisins: %i): \n", (int)p->getNeighbours().size());
         for (int i = 0; i < (int)p->getNeighbours().size(); i++)
         {
-            printf ( "x: %1.3f, ", p->getNeighbours()[i].getCoord()[0] );
-            printf ( "y: %1.3f, ", p->getNeighbours()[i].getCoord()[1] );
-            printf ( "z: %1.3f \n", p->getNeighbours()[i].getCoord()[2] );
+            printf ("id: %i, ",  p->getNeighbours()[i]->getId() );
+            printf ( "x: %1.3f, ", p->getNeighbours()[i]->getCoord()[0] );
+            printf ( "y: %1.3f, ", p->getNeighbours()[i]->getCoord()[1] );
+            printf ( "z: %1.3f \n", p->getNeighbours()[i]->getCoord()[2] );
         }
     }
 
     void printPointAttract(point* p)
     {
         printf ( "\n points attracts: \n");
-        for (int i = 0; i < (int)p->getPointAttract().size(); i++)
+
+        if( (int)p->getPointAttract().size() == 0 )
+            printf("Pas de points d'attraction\n");
+        else
         {
-            printf ( "x: %1.3f, ", p->getPointAttract()[i].getCoord()[0] );
-            printf ( "y: %1.3f, ", p->getPointAttract()[i].getCoord()[1] );
-            printf ( "z: %1.3f \n", p->getPointAttract()[i].getCoord()[2] );
+            for (int i = 0; i < (int)p->getPointAttract().size(); i++)
+            {
+                printf ( "id: %i, ",  p->getPointAttract()[i]->getId() );
+                printf ( "x: %1.3f, ", p->getPointAttract()[i]->getCoord()[0] );
+                printf ( "y: %1.3f, ", p->getPointAttract()[i]->getCoord()[1] );
+                printf ( "z: %1.3f \n", p->getPointAttract()[i]->getCoord()[2] );
+            }
         }
     }
 
@@ -62,6 +71,7 @@ namespace tetrasearch {
         
             getline( fileNode, line); // skip the first line 
             float cx, cy, cz;
+            int id;
 
             while ( getline( fileNode, line) )
             {
@@ -71,11 +81,12 @@ namespace tetrasearch {
                     std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                     std::istream_iterator<std::string>());
 
+                    id = stoi( results[0] );
                     cx = stof( results[1] );
                     cy = stof( results[2] );
                     cz = stof( results[3] );
 
-                    points.push_back( new point(cx, cy, cz));
+                    points.push_back( new point(id, cx, cy, cz));
                 }
             }
             fileNode.close();
@@ -141,9 +152,14 @@ namespace tetrasearch {
 
         for ( int i = 0; i < (int)points.size(); i++)
         {
-            points[i]->computePointAttract(1.f);
+            points[i]->computePointAttract(20.f);
         }
+        
+        printf( "\n===========VOISINS===========\n");
+        printNeighbours(points[0]);
 
+        printf( "\n===========ATTRACT POINTS===========\n");
+        printPointAttract(points[0]);
         return 0;
     }
 } // end namespace tetrasearch
