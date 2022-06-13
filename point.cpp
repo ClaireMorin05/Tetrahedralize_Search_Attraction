@@ -158,7 +158,7 @@ namespace tetrasearch{
 
     }
 
-    /*void point::computePointAttractV2( float r, std::vector<point*> pointList )
+    void point::computePointAttractV2( float r, std::vector<point*> pointList )
     {
         std::vector<int > points = this->neighbours;
         std::vector<int > traveled_points = this->neighbours;
@@ -177,6 +177,7 @@ namespace tetrasearch{
 
             for ( int i = 0; i<tailleActu; i++ )
             {
+                p = findPoint(pointList, points[i]);
                 if ( this->isAttract( p, r ) )
                 {
                     this->point_attract.push_back(points[0]);
@@ -186,7 +187,37 @@ namespace tetrasearch{
 
             if ( nbPointsAttrac == tailleActu )
             {
+                
+                while (tailleActu != 0)
+                {
+                    p = findPoint(pointList, points[0]);
+                    for ( int i = 0; i < (int)p->getNeighbours().size(); i++ )
+                    {
+                        belongs = false;
 
+                        for ( int j = 0; j < (int)traveled_points.size(); j++ ) 
+                        {
+                            
+                            if ( p->getNeighbours()[i] == traveled_points[j] || this->id == p->getNeighbours()[i] )
+                            {
+                                belongs = true;
+                                break;
+                            }
+                                
+                        }
+
+                        if ( !belongs )
+                        {
+                            traveled_points.push_back(p->getNeighbours()[i]);
+                            points.push_back(p->getNeighbours()[i]);
+                        }
+
+                    }
+                    points.erase(points.begin());
+                    tailleActu --;
+                }
+
+                tailleActu = (int)points.size();
             }
 
             else
@@ -194,39 +225,10 @@ namespace tetrasearch{
                 points.clear();
             }
 
-
-            p = findPoint(pointList, points[0]);
-            if ( this->isAttract( p, r ) )
-            {
-                this->point_attract.push_back(points[0]);
-                for ( int i = 0; i < (int)p->getNeighbours().size(); i++ )
-                {
-                    belongs = false;
-
-                    for ( int j = 0; j < (int)traveled_points.size(); j++ ) 
-                    {
-                        
-                        if ( p->getNeighbours()[i] == traveled_points[j] || this->id == p->getNeighbours()[i] )
-                        {
-                            belongs = true;
-                            break;
-                        }
-                            
-                    }
-
-                    if ( !belongs )
-                    {
-                        traveled_points.push_back(p->getNeighbours()[i]);
-                        points.push_back(p->getNeighbours()[i]);
-                    }
-
-                }
-            }
-
             points.erase(points.begin());
         }
 
-    }*/
+    }
 
 
     

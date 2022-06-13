@@ -86,6 +86,9 @@ namespace tetrasearch {
         }
     }
 
+    
+
+
 
     //================Reading files=================
     //=====================Nodes=======================
@@ -185,15 +188,20 @@ namespace tetrasearch {
             points[i]->computeNeighbours(tetras);
         }
 
-        for ( int i = 0; i < (int)points.size(); i++)
+        /*for ( int i = 0; i < (int)points.size(); i++)
         {
             points[i]->computePointAttract( 3.f, points );
-        }
+        }*/
 
         printf( "\n===========VOISINS===========\n");
         printNeighbours(points[0]);
 
-        printf( "\n===========ATTRACT POINTS===========\n");
+       /* printf( "\n===========ATTRACT POINTS===========\n");
+        points[0]->computePointAttract( 5.f, points );
+        printPointAttract(points[0]);*/
+
+        printf( "\n===========ATTRACT POINTS V2===========\n");
+        points[0]->computePointAttract( 5.f, points );
         printPointAttract(points[0]);
         
 

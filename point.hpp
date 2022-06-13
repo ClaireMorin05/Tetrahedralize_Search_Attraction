@@ -72,7 +72,7 @@ namespace tetrasearch{
 
             //============Point Attract V2============
 
-            //void computePointAttractV2( float r, std::vector<point*> pointList );
+            void computePointAttractV2( float r, std::vector<point*> pointList );
 
             //=======Version avec set===========
 
