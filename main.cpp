@@ -7,6 +7,7 @@
 #include <string>
 #include <iterator>
 #include <cmath>
+#include <chrono>
 
 using namespace std;
 
@@ -15,6 +16,10 @@ namespace tetrasearch {
     vector<Point*> points;
     vector<Tetrahedron*> tetras;
     vector<int> traveled_points;
+
+    std::chrono::time_point<std::chrono::system_clock> startV1, endV1;
+    std::chrono::time_point<std::chrono::system_clock> startV2, endV2;
+    std::chrono::time_point<std::chrono::system_clock> startV3, endV3;
 
     Point* findPoint( int id )
     {
@@ -165,38 +170,69 @@ namespace tetrasearch {
                     points[p2]->addTetrahedron( t );
                     points[p3]->addTetrahedron( t );
                     points[p4]->addTetrahedron( t );
-
+                    cout<< p1 <<endl;
                     
                 }
             }
             fileTetra.close();
         }
-        else printf( "Ouverture du fichier .node impossible \n");
+        else printf( "Ouverture du fichier .ele impossible \n");
     }
 
    
 
     int main(int argc, char const *argv[])
     {
-        string fileNodes = "data/tetgen-tmpfile.1.node";
-        string fileTetra = "data/tetgen-tmpfile.1.ele";
+        string fileNodes = "data/tetgen1000points.1.node";
+        string fileTetra = "data/tetgen1000points.1.ele";
         readNodes( fileNodes );
         readTetras( fileTetra );
         cout << "nombre de points: " << points.size() << endl;
         cout << "nombre de tetraèdres: " << tetras.size() << endl;
 
+        std::cout << " Calcul des voisins "<<std::endl;
         for ( int i = 0; i < (int)points.size(); i++)
         {
+            std::cout<< i+1 << "/1000" << std::endl;
             points[i]->computeNeighbours(tetras);
         }
 
-        /*for ( int i = 0; i < (int)points.size(); i++)
+        std::cout << " Calcul des points attracts"<<std::endl;
+        startV1 = std::chrono::system_clock::now();
+        for ( int i = 0; i < (int)points.size(); i++)
         {
             points[i]->computePointAttract( 3.f, points );
-        }*/
+        }
+        endV1 = std::chrono::system_clock::now();
+        std::chrono::duration<double> tempsV1 = endV1 - startV1;
+
+        std::cout<< " Temps version 1 : " << tempsV1.count() <<std::endl;
+
+
+        startV2 = std::chrono::system_clock::now();
+        for ( int i = 0; i < (int)points.size(); i++)
+        {
+            points[i]->computePointAttractV2( 3.f, points );
+        }
+        endV2 = std::chrono::system_clock::now();
+        std::chrono::duration<double> tempsV2 = endV2 - startV2;
+
+        std::cout<< " Temps version 2 : " << tempsV2.count() <<std::endl;
+
+
+        startV3 = std::chrono::system_clock::now();
+        for ( int i = 0; i < (int)points.size(); i++)
+        {
+            points[i]->computePointAttractV3( 3.f, points, traveled_points );
+        }
+        endV3 = std::chrono::system_clock::now();
+        std::chrono::duration<double> tempsV3 = endV3 - startV3;
+
+        std::cout<< " Temps version 3 : " << tempsV3.count() <<std::endl;
 
         printf( "\n===========VOISINS===========\n");
-        printNeighbours(points[0]);
+        printNeighbours(points[50]);
+        cout<< points[50]->getCoord()[0]<<endl;
 
        /* printf( "\n===========ATTRACT POINTS===========\n");
         points[0]->computePointAttract( 5.f, points );
@@ -206,9 +242,9 @@ namespace tetrasearch {
         points[0]->computePointAttractV2( 20.f, points );
         printPointAttract(points[0]);*/
 
-        printf( "\n===========ATTRACT POINTS V3===========\n");
+        /*printf( "\n===========ATTRACT POINTS V3===========\n");
         points[0]->computePointAttractV3( 5.f, points, traveled_points );
-        printPointAttract(points[0]);
+        printPointAttract(points[0]);*/
         
 
         /*printf( "\n===========ATTRACT POINTS VERSION SET===========\n");
