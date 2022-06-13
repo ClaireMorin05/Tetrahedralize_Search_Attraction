@@ -12,22 +12,22 @@ using namespace std;
 
 namespace tetrasearch {
 
-    vector<point*> points;
-    vector<tetrahedron*> tetras;
+    vector<Point*> points;
+    vector<Tetrahedron*> tetras;
 
-     point* findPoint( int id )
+     Point* findPoint( int id )
     {
         return points[id];
     }
 
-    tetrahedron* findTetra ( int id )
+    Tetrahedron* findTetra ( int id )
     {
         return tetras[id];
     }
 
-    void printPointsTetra( tetrahedron* t )
+    void printPointsTetra( Tetrahedron* t )
     {
-        point* p1;
+        Point* p1;
         for (int i = 0; i < (int)t->getPoints().size(); i++)
         {
             p1 = findPoint(t->getPoints()[i]);
@@ -38,10 +38,10 @@ namespace tetrasearch {
         }
     }
 
-    void printNeighbours(point* p)
+    void printNeighbours(Point* p)
     {
         printf( "\n points voisins (nb voisins: %i): \n", (int)p->getNeighbours().size());
-        point* p1;
+        Point* p1;
         for (int i = 0; i < (int)p->getNeighbours().size(); i++)
         {
             p1 = findPoint(p->getNeighbours()[i]);
@@ -52,7 +52,7 @@ namespace tetrasearch {
         }
     }
 
-    void printPointAttract(point* p)
+    void printPointAttract(Point* p)
     {
         printf ( "\n points attracts: \n");
 
@@ -67,7 +67,7 @@ namespace tetrasearch {
             float yp = p_coord[1] ;
             float zp = p_coord[2] ;
             float x, y ,z;
-            point* p1;
+            Point* p1;
 
             for (int i = 0; i < (int)p->getPointAttract().size(); i++)
             {
@@ -119,7 +119,7 @@ namespace tetrasearch {
                     cy = stof( results[2] );
                     cz = stof( results[3] );
 
-                    points.push_back( new point(id, cx, cy, cz));
+                    points.push_back( new Point(id, cx, cy, cz));
                 }
             }
             fileNode.close();
@@ -133,7 +133,7 @@ namespace tetrasearch {
     void readTetras( string fileName )
     {
         ifstream fileTetra( fileName, ios::in);
-        tetrahedron* t ;
+        Tetrahedron* t ;
 
         if ( fileTetra )
         {
@@ -156,7 +156,7 @@ namespace tetrasearch {
                     p3 = stoi( results[3] );
                     p4 = stoi( results[4] );
 
-                    t = new tetrahedron(id, p1, p2, p3, p4 );
+                    t = new Tetrahedron(id, p1, p2, p3, p4 );
                     tetras.push_back( t );
 
                     points[p1]->addTetrahedron( t );

@@ -2,21 +2,21 @@
 #define _POINT_HPP_
 
 #include <vector>
-//#include "tetrahedron.hpp"
+//#include "Tetrahedron.hpp"
 #include <set>
 #include <cstdio>
 
 namespace tetrasearch{
 
-    class tetrahedron;
+    class Tetrahedron;
 
     //bool comparatorSet(point a, point b){ return a.samePoints(b); }
 
-    class point{
+    class Point{
 
         struct compare
         {
-            bool operator()(const point* pa, const point* pb)const
+            bool operator()(const Point* pa, const Point* pb)const
             {
                 std::vector<float> a = pa->getCoord();
                 std::vector<float> b = pb->getCoord();
@@ -32,16 +32,16 @@ namespace tetrasearch{
 
         public :
 
-            point(){};
-            /*point( float _x, float _y, float _z, std::vector<tetrahedron> _tetra ) 
+            Point(){};
+            /*Point( float _x, float _y, float _z, std::vector<tetrahedron> _tetra ) 
             : x( _x ), y( _y ), z( _z ), tetra( _tetra ) {};*/
 
-            point( int _id, float _x, float _y, float _z) 
+            Point( int _id, float _x, float _y, float _z) 
             : id(_id), x( _x ), y( _y ), z( _z ) {};
 
-            ~point(){};
+            ~Point(){};
 
-            //static bool comparatorSet(point a, point b){ return a.samePoints(&b); }
+            //static bool comparatorSet(Point a, Point b){ return a.samePoints(&b); }
 
             std::vector<float> getCoord() const; 
             int getId();
@@ -52,27 +52,27 @@ namespace tetrasearch{
             
             inline void printCoord(){ printf("(x: %lf, y: %lf, z: %lf\n)", x, y, z); };
 
-            bool isAttract ( point* p, float attract_distance );
+            bool isAttract ( Point* p, float attract_distance );
 
-            void addPoint ( point* p );
+            void addPoint ( Point* p );
 
             void searchAdjPoint ();
 
-            void computeNeighbours( std::vector<tetrahedron*> tetraList );
+            void computeNeighbours( std::vector<Tetrahedron*> tetraList );
 
-            bool samePoints ( point* p );
+            bool samePoints ( Point* p );
 
-            void computePointAttract( float r, std::vector<point*> pointList );
+            void computePointAttract( float r, std::vector<Point*> PointList );
 
-            void addTetrahedron ( tetrahedron* t);
+            void addTetrahedron ( Tetrahedron* t);
 
-            point* findPoint ( std::vector<point*> pointList, int id );
+            Point* findPoint ( std::vector<Point*> PointList, int id );
 
-            tetrahedron* findTetra ( std::vector<tetrahedron*> pointList, int id );
+            Tetrahedron* findTetra ( std::vector<Tetrahedron*> PointList, int id );
 
             //============Point Attract V2============
 
-            void computePointAttractV2( float r, std::vector<point*> pointList );
+            void computePointAttractV2( float r, std::vector<Point*> PointList );
 
             //=======Version avec set===========
 

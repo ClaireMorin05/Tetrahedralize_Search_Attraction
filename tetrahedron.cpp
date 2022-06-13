@@ -2,12 +2,12 @@
 
 namespace tetrasearch{
 
-    std::vector<int> tetrahedron::getPoints()
+    std::vector<int> Tetrahedron::getPoints()
     {
         return points;
     }
 
-    int tetrahedron::getId()
+    int Tetrahedron::getId()
     {
         return id;
     }

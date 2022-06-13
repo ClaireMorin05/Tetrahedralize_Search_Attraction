@@ -5,7 +5,7 @@
 #include <cstdio>
 namespace tetrasearch{
 
-    std::vector<float> point::getCoord() const
+    std::vector<float> Point::getCoord() const
     {
         std::vector<float> coord;
         coord.push_back(this->x);
@@ -15,31 +15,31 @@ namespace tetrasearch{
         return coord;
     }
 
-    int point::getId()
+    int Point::getId()
     {
         return this->id;
     }
-    void point::addTetrahedron(tetrahedron* t)
+    void Point::addTetrahedron(Tetrahedron* t)
     {
         this->tetra.push_back(t->getId());
     }
 
-    std::vector<int> point::getTetrahedron()
+    std::vector<int> Point::getTetrahedron()
     {
         return this->tetra;
     }
 
-    std::vector<int> point::getPointAttract()
+    std::vector<int> Point::getPointAttract()
     {
         return this->point_attract;
     }
 
-    std::vector<int> point::getNeighbours()
+    std::vector<int> Point::getNeighbours()
     {
         return this->neighbours;
     }
 
-    bool point::isAttract(point* p, float attract_distance)
+    bool Point::isAttract( Point* p, float attract_distance)
     {
         std::vector<float> p_coord; 
         p_coord = p->getCoord();
@@ -55,12 +55,12 @@ namespace tetrasearch{
             return true;
     }
 
-    void point::addPoint( point* p )
+    void Point::addPoint( Point* p )
     {
         point_attract.push_back(p->getId());
     }
 
-    bool point::samePoints( point* p )
+    bool Point::samePoints( Point* p )
     {
         std::vector<float> pCoords = p->getCoord();
 
@@ -71,11 +71,11 @@ namespace tetrasearch{
             return true;
     }
 
-    void point::computeNeighbours( std::vector<tetrahedron*> tetraList)
+    void Point::computeNeighbours( std::vector<Tetrahedron*> tetraList)
     {
         bool belongs = false;
 
-        tetrahedron* tetrahedron;
+        Tetrahedron* tetrahedron;
 
         for ( int i = 0; i < (int)tetra.size(); i++)
         {
@@ -105,22 +105,22 @@ namespace tetrasearch{
     }
 
 
-    point* point::findPoint ( std::vector<point*> pointList, int id )
+    Point* Point::findPoint ( std::vector<Point*> pointList, int id )
     {
         return pointList[id];
     }
 
-    tetrahedron* point::findTetra ( std::vector<tetrahedron*> tetraList, int id )
+    Tetrahedron* Point::findTetra ( std::vector<Tetrahedron*> tetraList, int id )
     {
         return tetraList[id];
     }
 
-    void point::computePointAttract( float r, std::vector<point*> pointList )
+    void Point::computePointAttract( float r, std::vector<Point*> pointList )
     {
         std::vector<int > points = this->neighbours;
         std::vector<int > traveled_points = this->neighbours;
         bool belongs = false;
-        point* p;
+        Point* p;
 
         while ( points.size() != 0)
         {
@@ -158,7 +158,7 @@ namespace tetrasearch{
 
     }
 
-    void point::computePointAttractV2( float r, std::vector<point*> pointList )
+    void Point::computePointAttractV2( float r, std::vector<Point*> pointList )
     {
         std::vector<int > points = this->neighbours;
         std::vector<int > traveled_points = this->neighbours;
@@ -168,7 +168,7 @@ namespace tetrasearch{
         int nbPointsAttrac;
 
         bool belongs = false;
-        point* p;
+        Point* p;
 
         while ( points.size() != 0)
         {
@@ -232,10 +232,10 @@ namespace tetrasearch{
 
 
     
-    /*void point::computePointAttractVSet( float r )
+    /*void Point::computePointAttractVSet( float r )
     {
-        std::set<point*, point::compare> points;
-        std::set<point*, point::compare > traveled_points;
+        std::set<point*, Point::compare> points;
+        std::set<point*, Point::compare > traveled_points;
         std::cout<<"taille voisin : "<<this->neighbours.size()<<std::endl;
 
         for ( int i = 0; i < (int)this->neighbours.size(); i++ )

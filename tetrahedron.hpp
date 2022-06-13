@@ -6,10 +6,10 @@
 
 namespace tetrasearch{
 
-    class tetrahedron
+    class Tetrahedron
     {
         public :
-            tetrahedron( int _id, int p1, int p2, int p3, int p4 ) : id(_id)
+            Tetrahedron( int _id, int p1, int p2, int p3, int p4 ) : id(_id)
             { 
                 
                 points.push_back(p1);
@@ -18,7 +18,7 @@ namespace tetrasearch{
                 points.push_back(p4);
                 
             };
-            ~tetrahedron(){};
+            ~Tetrahedron(){};
 
             std::vector<int> getPoints();
             int getId();
