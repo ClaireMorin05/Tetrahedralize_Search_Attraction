@@ -60,15 +60,20 @@ namespace tetrasearch{
 
             void computeNeighbours( std::vector<Tetrahedron*> tetraList );
 
-            bool samePoints ( Point* p );
+            //============Voisins V2============
 
-            void computePointAttract( float r, std::vector<Point*> PointList );
+            void computeNeighboursV2( std::vector<Tetrahedron*> tetraList );
+
+            bool samePoints ( Point* p );
 
             void addTetrahedron ( Tetrahedron* t);
 
             Point* findPoint ( std::vector<Point*> PointList, int id );
 
             Tetrahedron* findTetra ( std::vector<Tetrahedron*> PointList, int id );
+
+
+            void computePointAttract( float r, std::vector<Point*> PointList );
 
             //============Point Attract V2============
 

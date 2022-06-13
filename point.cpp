@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdio>
 #include <chrono>
+#include <algorithm>
 
 namespace tetrasearch{
 
@@ -101,11 +102,35 @@ namespace tetrasearch{
                     if ( !belongs )
                         neighbours.push_back(tetrahedron->getPoints()[j]);
                 }
+
             } 
         }
         
     }
 
+    void Point::computeNeighboursV2( std::vector<Tetrahedron*> tetraList )
+    {
+        Tetrahedron* tetrahedron;
+
+        for ( int i = 0; i < (int)tetra.size(); i++)
+        {
+            tetrahedron = findTetra(tetraList, tetra[i]);
+
+            for ( int j = 0; j < 4; j++)
+            {
+                if ( this->id != tetrahedron->getPoints()[j] )
+                {
+                    neighbours.push_back(tetrahedron->getPoints()[j]);
+                }
+            }
+        }
+
+        sort(neighbours.begin(), neighbours.end());
+        auto last = std::unique(neighbours.begin(), neighbours.end());
+        neighbours.erase(last, neighbours.end());
+    }
+
+    
 
     Point* Point::findPoint ( std::vector<Point*> pointList, int id )
     {
@@ -233,33 +258,19 @@ namespace tetrasearch{
 
     void Point::computePointAttractV3( float r, std::vector<Point*> pointList, std::vector<int> traveled_point )
     {
-        //temps
-        /*std::chrono::time_point<std::chrono::system_clock> startInitTraveled, endInitTraveled;
-        std::chrono::time_point<std::chrono::system_clock> startWhile1, endWhile1;
-        std::chrono::time_point<std::chrono::system_clock> startWhile2, endWhile2;*/
-
-
-
         std::vector<int > points = this->neighbours;
 
-        //initialisation du tableau des points parcourus
-        //startInitTraveled = std::chrono::system_clock::now();
         for ( int i = 0; i< (int)points.size(); i++ )
         {
             traveled_point[points[i]] = this->id;
         }
         traveled_point[this->id] = this->id;
-        /*endInitTraveled = std::chrono::system_clock::now();
-        std::chrono::duration<double> tempsInitTraveled = endInitTraveled - startInitTraveled;
-
-        std::cout<< " Temps initialisation traveled_point : " << tempsInitTraveled.count() <<std::endl;*/
 
         int tailleActu;
 
         int nbPointsAttrac;
         Point* p;
 
-        //startWhile1 = std::chrono::system_clock::now();
         while ( points.size() != 0)
         {
             nbPointsAttrac = 0;
@@ -277,7 +288,6 @@ namespace tetrasearch{
 
             if ( nbPointsAttrac == tailleActu )
             {
-                //startWhile2 = std::chrono::system_clock::now();
                 while (tailleActu != 0)
                 {
                     p = findPoint(pointList, points[0]);
@@ -294,9 +304,6 @@ namespace tetrasearch{
                     points.erase(points.begin());
                     tailleActu --;
                 }
-                /*endWhile2 = std::chrono::system_clock::now();
-                std::chrono::duration<double> tempsWhile2 = endWhile2 - startWhile2;
-                std::cout<< " Temps initialisation traveled_point : " << tempsWhile2.count() <<std::endl;*/
 
                 tailleActu = (int)points.size();
             }
@@ -306,12 +313,6 @@ namespace tetrasearch{
                 points.clear();
             }
         }
-        /*endWhile1 = std::chrono::system_clock::now();
-        std::chrono::duration<double> tempsWhile1 = endWhile1 - startWhile1;
-
-        std::cout<< " Temps initialisation traveled_point : " << tempsWhile1.count() <<std::endl;*/
-
-
     }
     
     

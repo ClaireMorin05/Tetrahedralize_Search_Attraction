@@ -20,6 +20,8 @@ namespace tetrasearch {
     std::chrono::time_point<std::chrono::system_clock> startV1, endV1;
     std::chrono::time_point<std::chrono::system_clock> startV2, endV2;
     std::chrono::time_point<std::chrono::system_clock> startV3, endV3;
+    std::chrono::time_point<std::chrono::system_clock> startVoisinV1, endVoisinV1;
+    std::chrono::time_point<std::chrono::system_clock> startVoisinV2, endVoisinV2;
 
     Point* findPoint( int id )
     {
@@ -170,7 +172,6 @@ namespace tetrasearch {
                     points[p2]->addTetrahedron( t );
                     points[p3]->addTetrahedron( t );
                     points[p4]->addTetrahedron( t );
-                    cout<< p1 <<endl;
                     
                 }
             }
@@ -190,12 +191,27 @@ namespace tetrasearch {
         cout << "nombre de points: " << points.size() << endl;
         cout << "nombre de tetraèdres: " << tetras.size() << endl;
 
-        std::cout << " Calcul des voisins "<<std::endl;
+        std::cout << " Calcul des voisins V1 "<<std::endl;
+        startVoisinV1 = std::chrono::system_clock::now();
         for ( int i = 0; i < (int)points.size(); i++)
         {
-            std::cout<< i+1 << "/1000" << std::endl;
             points[i]->computeNeighbours(tetras);
         }
+        endVoisinV1 = std::chrono::system_clock::now();
+        std::chrono::duration<double> voisinV1 = endVoisinV1 - startVoisinV1;
+        std::cout<< " Voisin version 1 : " << voisinV1.count() <<std::endl;
+
+
+        std::cout << " Calcul des voisins V2 "<<std::endl;
+        startVoisinV2 = std::chrono::system_clock::now();
+        for ( int i = 0; i < (int)points.size(); i++)
+        {
+            points[i]->computeNeighboursV2(tetras);
+        }
+        endVoisinV2 = std::chrono::system_clock::now();
+        std::chrono::duration<double> voisinV2 = endVoisinV2 - startVoisinV2;
+        std::cout<< " Voisin version 2 : " << voisinV2.count() <<std::endl;
+
 
         std::cout << " Calcul des points attracts"<<std::endl;
         startV1 = std::chrono::system_clock::now();
@@ -205,7 +221,6 @@ namespace tetrasearch {
         }
         endV1 = std::chrono::system_clock::now();
         std::chrono::duration<double> tempsV1 = endV1 - startV1;
-
         std::cout<< " Temps version 1 : " << tempsV1.count() <<std::endl;
 
 
@@ -232,7 +247,6 @@ namespace tetrasearch {
 
         printf( "\n===========VOISINS===========\n");
         printNeighbours(points[50]);
-        cout<< points[50]->getCoord()[0]<<endl;
 
        /* printf( "\n===========ATTRACT POINTS===========\n");
         points[0]->computePointAttract( 5.f, points );
