@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <iterator>
+#include <cmath>
 
 using namespace std;
 
@@ -14,27 +15,40 @@ namespace tetrasearch {
     vector<point*> points;
     vector<tetrahedron*> tetras;
 
+     point* findPoint( int id )
+    {
+        return points[id];
+    }
+
+    tetrahedron* findTetra ( int id )
+    {
+        return tetras[id];
+    }
+
     void printPointsTetra( tetrahedron* t )
     {
+        point* p1;
         for (int i = 0; i < (int)t->getPoints().size(); i++)
         {
-            t->getPoints()[i]->getCoord();
-            printf ("id: %i, ",  t->getPoints()[i]->getId() );
-            printf ( "x: %1.3f, ", t->getPoints()[i]->getCoord()[0] );
-            printf ( "y: %1.3f, ", t->getPoints()[i]->getCoord()[1] );
-            printf ( "z: %1.3f \n", t->getPoints()[i]->getCoord()[2] );
+            p1 = findPoint(t->getPoints()[i]);
+            printf ("id: %i, ",  p1->getId() );
+            printf ( "x: %1.3f, ", p1->getCoord()[0] );
+            printf ( "y: %1.3f, ", p1->getCoord()[1] );
+            printf ( "z: %1.3f \n", p1->getCoord()[2] );
         }
     }
 
     void printNeighbours(point* p)
     {
         printf( "\n points voisins (nb voisins: %i): \n", (int)p->getNeighbours().size());
+        point* p1;
         for (int i = 0; i < (int)p->getNeighbours().size(); i++)
         {
-            printf ("id: %i, ",  p->getNeighbours()[i]->getId() );
-            printf ( "x: %1.3f, ", p->getNeighbours()[i]->getCoord()[0] );
-            printf ( "y: %1.3f, ", p->getNeighbours()[i]->getCoord()[1] );
-            printf ( "z: %1.3f \n", p->getNeighbours()[i]->getCoord()[2] );
+            p1 = findPoint(p->getNeighbours()[i]);
+            printf ("id: %i, ",  p1->getId() );
+            printf ( "x: %1.3f, ", p1->getCoord()[0] );
+            printf ( "y: %1.3f, ", p1->getCoord()[1] );
+            printf ( "z: %1.3f \n", p1->getCoord()[2] );
         }
     }
 
@@ -46,12 +60,28 @@ namespace tetrasearch {
             printf("Pas de points d'attraction\n");
         else
         {
+            std::vector<float> p_coord; 
+            p_coord = p->getCoord();
+
+            float xp = p_coord[0] ;
+            float yp = p_coord[1] ;
+            float zp = p_coord[2] ;
+            float x, y ,z;
+            point* p1;
+
             for (int i = 0; i < (int)p->getPointAttract().size(); i++)
             {
-                printf ( "id: %i, ",  p->getPointAttract()[i]->getId() );
-                printf ( "x: %1.3f, ", p->getPointAttract()[i]->getCoord()[0] );
-                printf ( "y: %1.3f, ", p->getPointAttract()[i]->getCoord()[1] );
-                printf ( "z: %1.3f \n", p->getPointAttract()[i]->getCoord()[2] );
+                p1 = findPoint( p->getPointAttract()[i] );
+                x = xp - p1->getCoord()[0];
+                y = yp - p1->getCoord()[1];
+                z = zp - p1->getCoord()[2];
+
+
+                printf ( "id: %i, ",  p1->getId() );
+                printf ( "x: %1.3f, ", p1->getCoord()[0] );
+                printf ( "y: %1.3f, ", p1->getCoord()[1] );
+                printf ( "z: %1.3f ", p1->getCoord()[2] );
+                printf ( "distance : %f\n", sqrt( x * x + y * y + z * z));
             }
         }
     }
@@ -107,7 +137,7 @@ namespace tetrasearch {
             printf( "(lecture du fichier ele...) Youpi ça fonctionne ! :D \n");
             string line;
             getline( fileTetra, line); // skip the first line 
-            int p1, p2, p3, p4;
+            int p1, p2, p3, p4, id;
 
             while ( getline( fileTetra, line) )
             {
@@ -117,12 +147,13 @@ namespace tetrasearch {
                     std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                     std::istream_iterator<std::string>());       
 
+                    id = stoi( results[0] );
                     p1 = stoi( results[1] );
                     p2 = stoi( results[2] );
                     p3 = stoi( results[3] );
                     p4 = stoi( results[4] );
 
-                    t = new tetrahedron(points[p1], points[p2], points[p3], points[p4] );
+                    t = new tetrahedron(id, p1, p2, p3, p4 );
                     tetras.push_back( t );
 
                     points[p1]->addTetrahedron( t );
@@ -138,6 +169,8 @@ namespace tetrasearch {
         else printf( "Ouverture du fichier .node impossible \n");
     }
 
+   
+
     int main(int argc, char const *argv[])
     {
         string fileNodes = "data/tetgen-tmpfile.1.node";
@@ -149,12 +182,12 @@ namespace tetrasearch {
 
         for ( int i = 0; i < (int)points.size(); i++)
         {
-            points[i]->computeNeighbours();
+            points[i]->computeNeighbours(tetras);
         }
 
         for ( int i = 0; i < (int)points.size(); i++)
         {
-            points[i]->computePointAttract(20.f);
+            points[i]->computePointAttract( 3.f, points );
         }
 
         printf( "\n===========VOISINS===========\n");
@@ -162,8 +195,15 @@ namespace tetrasearch {
 
         printf( "\n===========ATTRACT POINTS===========\n");
         printPointAttract(points[0]);
+        
+
+        /*printf( "\n===========ATTRACT POINTS VERSION SET===========\n");
+        points[0]->computePointAttractVSet(20.f);
+        printPointAttract(points[0]);*/
         return 0;
     }
+
+ 
 } // end namespace tetrasearch
 
 
