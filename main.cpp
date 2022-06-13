@@ -14,8 +14,9 @@ namespace tetrasearch {
 
     vector<Point*> points;
     vector<Tetrahedron*> tetras;
+    vector<int> traveled_points;
 
-     Point* findPoint( int id )
+    Point* findPoint( int id )
     {
         return points[id];
     }
@@ -120,6 +121,7 @@ namespace tetrasearch {
                     cz = stof( results[3] );
 
                     points.push_back( new Point(id, cx, cy, cz));
+                    traveled_points.push_back(id);
                 }
             }
             fileNode.close();
@@ -201,8 +203,12 @@ namespace tetrasearch {
         printPointAttract(points[0]);*/
 
         printf( "\n===========ATTRACT POINTS V2===========\n");
-        points[0]->computePointAttract( 5.f, points );
+        points[0]->computePointAttractV2( 10.f, points );
         printPointAttract(points[0]);
+
+        /*printf( "\n===========ATTRACT POINTS V3===========\n");
+        points[0]->computePointAttractV3( 20.f, points, traveled_points );
+        printPointAttract(points[0]);*/
         
 
         /*printf( "\n===========ATTRACT POINTS VERSION SET===========\n");

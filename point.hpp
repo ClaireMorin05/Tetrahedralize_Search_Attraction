@@ -74,9 +74,10 @@ namespace tetrasearch{
 
             void computePointAttractV2( float r, std::vector<Point*> PointList );
 
-            //=======Version avec set===========
+            //============Point Attract V3============
 
-            void computePointAttractVSet( float r );
+            void computePointAttractV3( float r, std::vector<Point*> PointList, std::vector<int> traveled_point );
+
 
         private :
 

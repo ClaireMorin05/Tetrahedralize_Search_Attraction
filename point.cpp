@@ -174,17 +174,15 @@ namespace tetrasearch{
         {
             nbPointsAttrac = 0;
             tailleActu = (int)points.size();
-
-            for ( int i = 0; i<tailleActu; i++ )
+            for ( int i = 0; i < tailleActu; i++ )
             {
                 p = findPoint(pointList, points[i]);
                 if ( this->isAttract( p, r ) )
                 {
-                    this->point_attract.push_back(points[0]);
+                    this->point_attract.push_back(p->id);
                     nbPointsAttrac += 1;
                 }
             }
-
             if ( nbPointsAttrac == tailleActu )
             {
                 
@@ -220,58 +218,79 @@ namespace tetrasearch{
                 tailleActu = (int)points.size();
             }
 
+            
             else
             {
                 points.clear();
             }
 
-            points.erase(points.begin());
+           
         }
 
     }
 
-
-    
-    /*void Point::computePointAttractVSet( float r )
+    void Point::computePointAttractV3( float r, std::vector<Point*> pointList, std::vector<int> traveled_point )
     {
-        std::set<point*, Point::compare> points;
-        std::set<point*, Point::compare > traveled_points;
-        std::cout<<"taille voisin : "<<this->neighbours.size()<<std::endl;
+        std::vector<int > points = this->neighbours;
 
-        for ( int i = 0; i < (int)this->neighbours.size(); i++ )
+        //initialisation du tableau des points parcourus
+        for ( int i = 0; i< (int)points.size(); i++ )
         {
-            std::cout<< neighbours[i]->getId()<<std::endl;
-            points.insert(this->neighbours[i]);
-            traveled_points.insert(this->neighbours[i]);
+            traveled_point[points[i]] = this->id;
         }
+        traveled_point[this->id] = this->id;
 
+        int tailleActu;
+
+        int nbPointsAttrac;
+        Point* p;
 
         while ( points.size() != 0)
         {
-            std::cout<< "taille points : " << points.size()<<std::endl;
-            std::cout<< "taille traveled_points : " << traveled_points.size()<<std::endl;
+            nbPointsAttrac = 0;
+            tailleActu = (int)points.size();
 
-            if ( this->isAttract( *points.begin(), r ) )
+            for ( int i = 0; i<tailleActu; i++ )
             {
-                std::cout<<"dans le if"<<std::endl;
-                
-                this->point_attract.push_back(*points.begin());
-                for ( int i = 0; i < (int)(*points.begin())->getNeighbours().size(); i++ )
+                p = findPoint(pointList, points[i]);
+                if ( this->isAttract( p, r ) )
                 {
-                   
-                    
-                    traveled_points.insert((*points.begin())->getNeighbours()[i]);
-                    points.insert((*points.begin())->getNeighbours()[i]);
-
-
-
+                    this->point_attract.push_back(p->id);
+                    nbPointsAttrac += 1;
                 }
             }
 
-            points.erase(points.begin());
+            if ( nbPointsAttrac == tailleActu )
+            {
+                
+                while (tailleActu != 0)
+                {
+                    p = findPoint(pointList, points[0]);
+                    for ( int i = 0; i < (int)p->getNeighbours().size(); i++ )
+                    {
+                        
+                        if ( p->getNeighbours()[i] != this->id )
+                        {
+                            points.push_back(p->getNeighbours()[i]);
+                        }
+
+                    }
+                    points.erase(points.begin());
+                    tailleActu --;
+                }
+
+                tailleActu = (int)points.size();
+            }
+
+            else
+            {
+                points.clear();
+            }
         }
 
-    }*/
+    }
+    
+    
 
 
 }
