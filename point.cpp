@@ -269,9 +269,10 @@ namespace tetrasearch{
                     for ( int i = 0; i < (int)p->getNeighbours().size(); i++ )
                     {
                         
-                        if ( p->getNeighbours()[i] != this->id )
+                        if ( traveled_point[p->getNeighbours()[i]] != this->id )
                         {
                             points.push_back(p->getNeighbours()[i]);
+                            traveled_point[p->getNeighbours()[i]] = this->id;
                         }
 
                     }
